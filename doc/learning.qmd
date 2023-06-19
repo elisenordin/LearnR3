@@ -1,14 +1,36 @@
 ---
 title: "Draft R Markdown document"
 author: "Your Name"
-output: html_document
+format: html
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup}
+library(tidyverse)
+library(vroom)
+library(here)
 ```
 
+
+## Importing raw data
 ```{r}
-# Code chunk
+user_1_info_file <- here("data-raw/mmash/user_1/user_info.csv")
+user_1_info_data <- vroom(user_1_info_file)
+# vroom first pga need to first import the data
+# sepc show what is imported
+# use vroom to  show the data, easier for people to read
+spec(user_1_info_data) # get info of type of data
+# To check with dataform, and possibility to change
+user_1_info_data <- vroom(user_1_info_file, # limit messages that pop up
+  col_select = -1, # or use cols_only
+  # col_types= can write only import file X and Y
+  col_types = cols(
+    col_skip(),
+    gender = col_character(),
+    weight = col_double(),
+    height = col_double(),
+    age = col_double()
+  ),
+  .name_repair = snakecase::to_snake_case # remove a message
+)
+spec(user_1_info_data)
 ```
-
