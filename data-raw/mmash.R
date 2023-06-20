@@ -35,6 +35,12 @@ source(here("R/functions.R"))
 #
 # r3::check_project_setup()
 
+# regular expression
+x <- use_info_df$file_path_id[1]
+x_numbers <- regmatches(x, gregexpr("[[:digit:]]+", x))  # Apply gregexpr & regmatches
+x_numbers
+
+
 use_info_df <- import_multiple_files(
     "user_info.csv",
     import_user_info
