@@ -42,7 +42,9 @@ saliva_df %>% summarise(
 )
 saliva_df %>% summarise(across(c(cortisol_norm, melatonin_norm), mean))
 
-saliva_df %>% summarise(across(c(cortisol_norm, melatonin_norm), list(average = mean, sd = sd)))
+saliva_df %>% summarise(across(c(cortisol_norm, melatonin_norm), list(
+    average = mean, 
+    sd = sd)))
 saliva_df %>% summarise(across(c(where(is.numeric)), list(mean = mean)))
 
 names(list(mean = mean))
@@ -75,3 +77,25 @@ summarised_rr_df <- rr_df %>%
   ))) %>%
   ungroup()
 ```
+
+
+## Exercise: Summarise  Actigraph
+```{r}
+actigraph_df <- import_multiple_files("Actigraph.csv", import_actigraph)
+summarised_actigraph_df <- actigraph_df %>%
+  group_by(file_path_id, day) %>%
+  # These statistics will probably be different for you
+  summarise(across(c(hr,steps), list(
+    mean = ~ mean(.x, na.rm = TRUE),
+    sd = ~ sd(.x, na.rm = TRUE)
+  ))) %>%
+  ungroup()
+
+
+```
+
+
+
+
+
+

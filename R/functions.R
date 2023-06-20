@@ -90,3 +90,6 @@ import_multiple_files <- function(file_pattern, import_function) {
         purrr::list_rbind(names_to = "file_path_id")
     return(combined_data)
 }
+
+
+
