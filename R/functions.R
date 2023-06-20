@@ -42,7 +42,7 @@ import_actigraph <- function(file_path) {
     file_path,
     col_select = -1,
     col_types = vroom::cols(
-      col_skip(),
+        vroom::col_skip(),
       axis_1 = vroom::col_double(),
       axis_2 = vroom::col_double(),
       axis_3 = vroom::col_double(),
@@ -66,11 +66,11 @@ import_rr <- function(file_path) {
   rr_data <- vroom::vroom(
     file_path,
     col_select = -1,
-    col_types = cols(
-      col_skip(),
-      ibi_s = col_double(),
-      day = col_double(),
-      time = col_time(format = "")
+    col_types = vroom::cols(
+        vroom::col_skip(),
+      ibi_s = vroom::col_double(),
+      day = vroom::col_double(),
+      time = vroom::col_time(format = "")
     ),
     .name_repair = snakecase::to_snake_case
   )

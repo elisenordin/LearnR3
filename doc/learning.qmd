@@ -5,11 +5,11 @@ format: html
 ---
 
 ```{r setup}
-library(tidyverse)
-library(vroom)
-library(here)
+# library(tidyverse)
+# library(vroom)
+# library(here)
 
-source(here("R/functions.R"))
+source(here::here("R/functions.R"))
 
 ```
 
@@ -113,10 +113,6 @@ import_actigraph(here::here("data-raw/mmash/user_1/actigraph.csv"))
 ```
 
 
-
-
-
-
 ## Making a function
 
 ```{r}
@@ -125,7 +121,7 @@ add_numbers(1, 2)
 ```
 
 
-
+# user_info data function
 
 ```{r}
 
@@ -141,7 +137,14 @@ import_user_info(here::here("data-raw/mmash/user_1/user_info.csv"))
 #' Saliva dataset
 
 
-import_saliva(here("data-raw/mmash/user_2/saliva.csv"))
+import_saliva(here::here("data-raw/mmash/user_2/saliva.csv"))
 
 ```
+
+
+## rr data as function
+```{r}
+import_rr(here::here("data-raw/mmash/user_2/rr.csv"))
+```
+
 
