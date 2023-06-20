@@ -15,15 +15,19 @@ source(here::here("R/functions.R"))
 ```
 
 ```{r}
-user_info_df <- import_multiple_files("user_info.csv", import_user_info)
-# Note: your file paths and data may look slightly different.
-user_info_df %>%
-  mutate(
-    user_id = str_extract(
-      file_path_id,
-      "user_[1-9][0-9]?"
-    ),
-    .before = everything()
-  ) %>%
-  select(-file_path_id)
+
+extract_user_id <- function(imported_data) {
+  extracted_id <- imported_data %>%
+    dplyr::mutate(
+      user_id = str_extract(
+        file_path_id,
+        "user_[1-9][0-9]?"
+      ),
+      .before = everything()
+    ) %>%
+    select(-file_path_id)
+  return(extracted_id)
+}
+
+extract_user_id(user_info_df)
 ```
