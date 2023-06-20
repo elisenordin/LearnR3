@@ -5,64 +5,66 @@ format: html
 ---
 
 ```{r setup}
-library(tidyverse)
-library(vroom)
+# library(tidyverse)
+# library(vroom)
 library(here)
+
+source(here("R/functions.R"))
+
 ```
 
 
 ## Importing raw data
 ```{r}
-user_1_info_file <- here("data-raw/mmash/user_1/user_info.csv")
-user_1_info_data <- vroom(user_1_info_file)
-# vroom first pga need to first import the data
-# sepc show what is imported
-# use vroom to  show the data, easier for people to read
-spec(user_1_info_data) # get info of type of data
-# To check with dataform, and possibility to change
-user_1_info_data <- vroom(user_1_info_file, # limit messages that pop up
-  col_select = -1, # or use cols_only
-  # col_types= can write only import file X and Y
-  col_types = cols(
-    col_skip(),
-    gender = col_character(),
-    weight = col_double(),
-    height = col_double(),
-    age = col_double()
-  ),
-  .name_repair = snakecase::to_snake_case # remove a message
-)
-spec(user_1_info_data)
+# user_1_info_file <- here("data-raw/mmash/user_1/user_info.csv")
+# user_1_info_data <- vroom(user_1_info_file)
+# # vroom first pga need to first import the data
+# # sepc show what is imported
+# # use vroom to  show the data, easier for people to read
+# spec(user_1_info_data) # get info of type of data
+# # To check with dataform, and possibility to change
+# user_1_info_data <- vroom(user_1_info_file, # limit messages that pop up
+#   col_select = -1, # or use cols_only
+#   # col_types= can write only import file X and Y
+#   col_types = cols(
+#     col_skip(),
+#     gender = col_character(),
+#     weight = col_double(),
+#     height = col_double(),
+#     age = col_double()
+#   ),
+#   .name_repair = snakecase::to_snake_case # remove a message
+# )
+# spec(user_1_info_data)
 ```
 
 
 ## Exercise: Import the saliva data
 ```{r}
-rm(list = ls())
-user_1_saliva_file <- here("data-raw/mmash/user_1/saliva.csv")
-user_1_saliva_data_prep <- vroom(
-  user_1_saliva_file,
-  col_select = -1,
-  .name_repair = snakecase::to_snake_case
-)
-spec(user_1_saliva_data_prep)
-
-user_1_saliva_data <- vroom(
-  user_1_saliva_file,
-  col_select = -1,
-  col_types = cols(
-    col_skip(),
-    samples = col_character(),
-    cortisol_norm = col_double(),
-    melatonin_norm = col_double()
-  ),
-  .name_repair = snakecase::to_snake_case
-)
+# user_1_saliva_file <- here("data-raw/mmash/user_1/saliva.csv")
+# user_1_saliva_data_prep <- vroom(
+#   user_1_saliva_file,
+#   col_select = -1,
+#   .name_repair = snakecase::to_snake_case
+# )
+# spec(user_1_saliva_data_prep)
+# 
+# user_1_saliva_data <- vroom(
+#   user_1_saliva_file,
+#   col_select = -1,
+#   col_types = cols(
+#     col_skip(),
+#     samples = col_character(),
+#     cortisol_norm = col_double(),
+#     melatonin_norm = col_double()
+#   ),
+#   .name_repair = snakecase::to_snake_case
+# )
 ```
 
-spec(user_1_saliva_data_prep)
 
-## Importing longer datasets
+
+## Importing longer datasets -->
 
 ```{r}
 user_1_rr_file <- here("data-raw/mmash/user_1/RR.csv")
@@ -122,7 +124,7 @@ user_1_actigraph_data <- vroom(
 )
 ```
 
-# coltype="c" - all will be character/ "d", all will be double
+
 
 
 
@@ -147,3 +149,23 @@ add_numbers <- function(num1, num2) {
 ```
 
 add_numbers(1, 2)
+
+
+```{r}
+
+import_user_info(here::here("data-raw/mmash/user_1/user_info.csv"))
+
+```
+
+
+
+## Exercise for importing the saliva data as a function
+
+```{r}
+#' Saliva dataset
+
+
+import_saliva(here("data-raw/mmash/user_2/saliva.csv"))
+
+```
+
