@@ -76,3 +76,17 @@ import_rr <- function(file_path) {
   )
   return(rr_data)
 }
+
+
+
+library(magrittr) # only have the pipe, cant be mixed up with other
+import_multiple_files <- function(file_pattern, import_function) {
+    data_files <- fs::dir_ls(here::here("data-raw/mmash/"),
+                             regexp = file_pattern,
+                             recurse = TRUE
+    )
+
+    combined_data <- purrr::map(data_files, import_function) %>%
+        purrr::list_rbind(names_to = "file_path_id")
+    return(combined_data)
+}

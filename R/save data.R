@@ -134,3 +134,28 @@ import_rr(here::here("data-raw/mmash/user_2/rr.csv"))
 ```
 
 
+
+
+## Importing all user info data
+```{r}
+library(magrittr) # only have the pipe, cant be mixed up with other
+file_pattern="saliva.csv"
+import_function <- "import_saliva"
+import_multiple_files <- function(file_pattern, import_function) {
+    data_files <- fs::dir_ls(here::here("data-raw/mmash/"),
+                             regexp = file_pattern,
+                             recurse = TRUE
+    )
+
+    combined_data <- purrr::map(data_files, import_function) %>%
+        purrr::list_rbind(names_to = "file_path_id")
+    return(combined_data)
+}
+
+# Test on saliva in the Console
+import_multiple_files("saliva.csv", import_saliva)
+import_multiple_files("Actigraph.csv", import_actigraph)
+import_multiple_files("user_info.csv", import_user_info)
+import_multiple_files("rr.csv", import_rr)
+
+```
