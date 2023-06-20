@@ -171,7 +171,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vroom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fs) <span class="co"># file syastem</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'fs' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vroom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'vroom' was built under R version 4.2.3</code></pre>
 </div>
@@ -188,174 +192,194 @@ The following objects are masked from 'package:readr':
     fwf_empty, fwf_positions, fwf_widths, locale, output_column,
     problems, spec</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>here() starts at C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">"R/functions.R"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">dplyr.summarise.inform =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"R/functions.R"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'magrittr'
+
+The following object is masked from 'package:purrr':
+
+    set_names
+
+The following object is masked from 'package:tidyr':
+
+    extract</code></pre>
 </div>
-<section id="importing-raw-data" class="level2">
-<h2 class="anchored" data-anchor-id="importing-raw-data">Importing raw data</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_info_file &lt;- here("data-raw/mmash/user_1/user_info.csv")</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_info_data &lt;- vroom(user_1_info_file)</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># # vroom first pga need to first import the data</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># # sepc show what is imported</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># # use vroom to  show the data, easier for people to read</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># spec(user_1_info_data) # get info of type of data</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># # To check with dataform, and possibility to change</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_info_data &lt;- vroom(user_1_info_file, # limit messages that pop up</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_select = -1, # or use cols_only</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   # col_types= can write only import file X and Y</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_types = cols(</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     col_skip(),</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     gender = col_character(),</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co">#     weight = col_double(),</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co">#     height = col_double(),</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#     age = col_double()</span></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   ),</span></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .name_repair = snakecase::to_snake_case # remove a message</span></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="co"># spec(user_1_info_data)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="exercise-import-the-saliva-data" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-import-the-saliva-data">Exercise: Import the saliva data</h2>
+<section id="importing-all-user-info-data" class="level2">
+<h2 class="anchored" data-anchor-id="importing-all-user-info-data">Importing all user info data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_saliva_file &lt;- here("data-raw/mmash/user_1/saliva.csv")</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_saliva_data_prep &lt;- vroom(</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   user_1_saliva_file,</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_select = -1,</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   .name_repair = snakecase::to_snake_case</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># spec(user_1_saliva_data_prep)</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_saliva_data &lt;- vroom(</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   user_1_saliva_file,</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_select = -1,</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_types = cols(</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     col_skip(),</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#     samples = col_character(),</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#     cortisol_norm = col_double(),</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co">#     melatonin_norm = col_double()</span></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   ),</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .name_repair = snakecase::to_snake_case</span></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="importing-longer-datasets" class="level2">
-<h2 class="anchored" data-anchor-id="importing-longer-datasets">Importing longer datasets –&gt;</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_rr_file &lt;- here("data-raw/mmash/user_1/RR.csv")</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_rr_data_prep &lt;- vroom(</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   user_1_rr_file,</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_select = -1,</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   n_max = 100, # import max 100 rows</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   .name_repair = snakecase::to_snake_case</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># spec(user_1_rr_data_prep)</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># import_rr &lt;- function(file_path) {</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     rr_data &lt;- vroom::vroom(</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         file_path,</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_select = -1,</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_types = cols(</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_skip(),</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   ibi_s = col_double(),</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   day = col_double(),</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   time = col_time(format = "")</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ),</span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   .name_repair = snakecase::to_snake_case</span></span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     return(rr_data)</span></span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
-<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="fu">import_rr</span> (here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data-raw/mmash/user_1/rr.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>user_info_df <span class="ot">&lt;-</span> <span class="fu">import_multiple_files</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"user_info.csv"</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  import_user_info</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="ot">&lt;-</span> <span class="fu">import_multiple_files</span>(</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"saliva.csv"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  import_saliva</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>user_info_df <span class="sc">%&gt;%</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 91,858 × 3
-   ibi_s   day time    
-   &lt;dbl&gt; &lt;dbl&gt; &lt;time&gt;  
- 1 0.258     1 10:10:17
- 2 0.319     1 10:10:18
- 3 0.266     1 10:10:18
- 4 0.401     1 10:10:18
- 5 1.09      1 10:10:19
- 6 0.752     1 10:10:20
- 7 0.337     1 10:10:20
- 8 0.933     1 10:10:21
- 9 0.731     1 10:10:22
-10 0.454     1 10:10:23
-# ℹ 91,848 more rows</code></pre>
+<pre><code># A tibble: 22 × 1
+     age
+   &lt;dbl&gt;
+ 1    29
+ 2    27
+ 3    27
+ 4    27
+ 5    25
+ 6    27
+ 7    24
+ 8    27
+ 9    24
+10     0
+# ℹ 12 more rows</code></pre>
 </div>
-</div>
-</section>
-<section id="exercise-import-the-actigraph-data-test-another-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-import-the-actigraph-data-test-another-dataset">Exercise: Import the Actigraph data, test another dataset</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_actigraph_file &lt;- here("data-raw/mmash/user_1/Actigraph.csv")</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># user_1_actigraph_data_prep &lt;- vroom(</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   user_1_actigraph_file,</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   col_select = -1,</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   n_max = 100, # import max 100 rows</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   .name_repair = snakecase::to_snake_case</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># spec(user_1_actigraph_data_prep)</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">import_actigraph</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data-raw/mmash/user_1/actigraph.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>user_info_df <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 67,936 × 12
-   axis_1 axis_2 axis_3 steps    hr inclinometer_off inclinometer_standing
-    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;                 &lt;dbl&gt;
- 1      0      0      0     0    68                0                     1
- 2     11      4      7     1    68                0                     1
- 3      0     21     10     0    68                0                     0
- 4      0      1     24     0    68                0                     0
- 5     34     14     63     1   154                0                     1
- 6    101     10     90     0   161                0                     1
- 7     17     18     49     0   177                0                     1
- 8      0     34     23     0   177                0                     1
- 9     12     50     13     1   177                0                     1
-10     32     38     36     0   177                0                     1
-# ℹ 67,926 more rows
-# ℹ 5 more variables: inclinometer_sitting &lt;dbl&gt;, inclinometer_lying &lt;dbl&gt;,
-#   vector_magnitude &lt;dbl&gt;, day &lt;dbl&gt;, time &lt;time&gt;</code></pre>
+<pre><code># A tibble: 22 × 3
+   weight height   age
+    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1     65    169    29
+ 2     85    180    27
+ 3    115    186    27
+ 4     67    170    27
+ 5     74    180    25
+ 6     64    171    27
+ 7     80    180    24
+ 8     67    176    27
+ 9     60    175    24
+10     80    180     0
+# ℹ 12 more rows</code></pre>
 </div>
-</div>
-</section>
-<section id="making-a-function" class="level2">
-<h2 class="anchored" data-anchor-id="making-a-function">Making a function</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">add_numbers</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>user_info_df <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.character))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 3</code></pre>
+<pre><code># A tibble: 22 × 2
+   file_path_id                                                           gender
+   &lt;chr&gt;                                                                  &lt;chr&gt; 
+ 1 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+ 2 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+ 3 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+ 4 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+ 5 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+ 6 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+ 7 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+ 8 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+ 9 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+10 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
+# ℹ 12 more rows</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cortisol_mean =</span> <span class="fu">mean</span>(cortisol_norm),</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">melatonin_mean =</span> <span class="fu">mean</span>(melatonin_norm)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  cortisol_mean melatonin_mean
+          &lt;dbl&gt;          &lt;dbl&gt;
+1        0.0490  0.00000000765</code></pre>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">import_user_info</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data-raw/mmash/user_1/user_info.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(cortisol_norm, melatonin_norm), mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  cortisol_norm melatonin_norm
+          &lt;dbl&gt;          &lt;dbl&gt;
+1        0.0490  0.00000000765</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(cortisol_norm, melatonin_norm), <span class="fu">list</span>(<span class="at">average =</span> mean, <span class="at">sd =</span> sd)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 4
-  gender weight height   age
-  &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-1 M          65    169    29</code></pre>
+  cortisol_norm_average cortisol_norm_sd melatonin_norm_average
+                  &lt;dbl&gt;            &lt;dbl&gt;                  &lt;dbl&gt;
+1                0.0490           0.0478          0.00000000765
+# ℹ 1 more variable: melatonin_norm_sd &lt;dbl&gt;</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="fu">where</span>(is.numeric)), <span class="fu">list</span>(<span class="at">mean =</span> mean)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  cortisol_norm_mean melatonin_norm_mean
+               &lt;dbl&gt;               &lt;dbl&gt;
+1             0.0490       0.00000000765</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">list</span>(<span class="at">mean =</span> mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "mean"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># across(c(age, weight), ~ mean(.x, na.rm = TRUE))</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># across(c(age, weight), function(x) mean(x, na.rm = TRUE))</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># across(c(age, weight), \(x) mean(x, na.rm = TRUE))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="exercise-for-importing-the-saliva-data-as-a-function" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-for-importing-the-saliva-data-as-a-function">Exercise for importing the saliva data as a function</h2>
+<section id="summarising-r" class="level2">
+<h2 class="anchored" data-anchor-id="summarising-r">Summarising R</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Saliva dataset</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">import_saliva</span>(<span class="fu">here</span>(<span class="st">"data-raw/mmash/user_2/saliva.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 3
-  samples      cortisol_norm melatonin_norm
-  &lt;chr&gt;                &lt;dbl&gt;          &lt;dbl&gt;
-1 before sleep        0.0212   0.0000000168
-2 wake up             0.261    0.0000000285</code></pre>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>rr_df <span class="ot">&lt;-</span> <span class="fu">import_multiple_files</span>(<span class="st">"RR.csv"</span>, import_rr)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>rr_df <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(file_path_id, day) <span class="sc">%&gt;%</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(ibi_s), <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
+dplyr 1.1.0.
+ℹ Please use `reframe()` instead.
+ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
+  always returns an ungrouped data frame and adjust accordingly.</code></pre>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,749,295 × 4
+# Groups:   file_path_id, day [44]
+   file_path_id                                 day ibi_s list(mean = ~mean(.x…¹
+   &lt;chr&gt;                                      &lt;dbl&gt; &lt;dbl&gt; &lt;named list&gt;          
+ 1 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.258 &lt;formula&gt;             
+ 2 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.319 &lt;formula&gt;             
+ 3 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.266 &lt;formula&gt;             
+ 4 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.401 &lt;formula&gt;             
+ 5 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 1.09  &lt;formula&gt;             
+ 6 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.752 &lt;formula&gt;             
+ 7 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.337 &lt;formula&gt;             
+ 8 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.933 &lt;formula&gt;             
+ 9 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.731 &lt;formula&gt;             
+10 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.454 &lt;formula&gt;             
+# ℹ 1,749,285 more rows
+# ℹ abbreviated name: ¹​`list(mean = ~mean(.x, na.rm = TRUE))`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rr_df <span class="ot">&lt;-</span> <span class="fu">import_multiple_files</span>(<span class="st">"RR.csv"</span>, import_rr)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>rr_df <span class="sc">%&gt;%</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(file_path_id, day) <span class="sc">%&gt;%</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(ibi_s, <span class="fu">list</span>(<span class="at">mean =</span> mean)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 44 × 3
+# Groups:   file_path_id [22]
+   file_path_id                                                   day ibi_s_mean
+   &lt;chr&gt;                                                        &lt;dbl&gt;      &lt;dbl&gt;
+ 1 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.666
+ 2 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.793
+ 3 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.820
+ 4 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.856
+ 5 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.818
+ 6 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.923
+ 7 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.779
+ 8 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.883
+ 9 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.727
+10 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.953
+# ℹ 34 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>summarised_rr_df <span class="ot">&lt;-</span> rr_df <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(file_path_id, day) <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(ibi_s, <span class="fu">list</span>(</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="sc">~</span> <span class="fu">sd</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  ))) <span class="sc">%&gt;%</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 
