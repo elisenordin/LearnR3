@@ -5,10 +5,27 @@ format: html
 ---
 
 ```{r setup}
-# library(tidyverse)
-# library(vroom)
-# library(here)
+library(tidyverse)
+library(fs) # file syastem
+library(vroom)
+library(here)
 
 source(here::here("R/functions.R"))
+```
 
+## Importing all user info data
+```{r}
+user_info_files <- dir_ls(
+  here("data-raw/mmash/"),
+  regexp = "user_info.csv",
+  recurse = TRUE
+)
+
+user_info_data_frame <- map(
+  user_info_files,
+  import_user_info
+) %>%
+  list_rbind(names_to = "file_path_id") #
+
+user_info_data_frame
 ```
