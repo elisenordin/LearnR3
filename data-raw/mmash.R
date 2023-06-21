@@ -1,5 +1,6 @@
 ## code to prepare `mmash` dataset goes here
 library(tidyverse)
+library(fs)
 # usethis::use_data(mmash, overwrite = TRUE)
 library(here)
 source(here("R/functions.R"))
@@ -24,7 +25,7 @@ source(here("R/functions.R"))
 # # # its here to show how we got the file list.
 # # fs::dir_tree("data-raw", recurse = 1)
 # #
-# # library(fs)
+
 # file_delete(here(c(
 #     "data-raw/MMASH.zip",
 #     "data-raw/SHA256SUMS.txt",
@@ -36,42 +37,61 @@ source(here("R/functions.R"))
 # r3::check_project_setup()
 
 # regular expression
-x <- use_info_df$file_path_id[1]
-x_numbers <- regmatches(x, gregexpr("[[:digit:]]+", x))  # Apply gregexpr & regmatches
-x_numbers
+# x <- use_info_df$user_id[1] # file_path_id
+# x_numbers <- regmatches(x, gregexpr("[[:digit:]]+", x))  # Apply gregexpr & regmatches
+# x_numbers
 
 
-use_info_df <- import_multiple_files(
-    "user_info.csv",
-    import_user_info
+user_info_df <- import_multiple_files(
+  "user_info.csv",
+  import_user_info
 )
 
 saliva_df <- import_multiple_files(
-    "user_info.csv",
-    import_saliva
+  "saliva.csv",
+  import_saliva
 )
 
-rr_df <- import_multiple_files("RR.csv", import_rr)
+rr_df <- import_multiple_files(
+    "RR.csv", import_rr)
 
-actigraph_df <- import_multiple_files("Actigraph.csv", import_actigraph)
+actigraph_df <- import_multiple_files(
+    "Actigraph.csv", import_actigraph)
 
 rr_df %>%
-    group_by(file_path_id, day) %>%
-    summarise(across(ibi_s, list(mean = mean)))
+  group_by(user_id, day) %>%
+  summarise(across(ibi_s, list(mean = mean)))
 
 summarised_rr_df <- rr_df %>%
-    group_by(file_path_id, day) %>%
-    summarise(across(ibi_s, list(
-        mean = ~ mean(.x, na.rm = TRUE),
-        sd = ~ sd(.x, na.rm = TRUE)
-    ))) %>%
-    ungroup()
+  group_by(user_id, day) %>%
+  summarise(across(ibi_s, list(
+    mean = ~ mean(.x, na.rm = TRUE),
+    sd = ~ sd(.x, na.rm = TRUE)
+  ))) %>%
+  ungroup()
 
 summarised_actigraph_df <- actigraph_df %>%
-    group_by(file_path_id, day) %>%
-    # These statistics will probably be different for you
-    summarise(across(c(hr,steps), list(
-        mean = ~ mean(.x, na.rm = TRUE),
-        sd = ~ sd(.x, na.rm = TRUE)
-    ))) %>%
-    ungroup()
+  group_by(user_id, day) %>%
+  # These statistics will probably be different for you
+  summarise(across(c(hr, steps), list(
+    mean = ~ mean(.x, na.rm = TRUE),
+    sd = ~ sd(.x, na.rm = TRUE)
+  ))) %>%
+  ungroup()
+
+
+saliva_with_day_df <- saliva_df %>%
+  mutate(day = case_when(
+    samples == "before sleep" ~ 1,
+    samples == "wake up" ~ 2,
+  ))
+mmash <- list(
+  user_info_df,
+  saliva_with_day_df,
+  summarised_rr_df,
+  summarised_actigraph_df
+) %>%
+  reduce(full_join)
+
+
+usethis::use_data(mmash, overwrite = TRUE) # use_data - save it as a rda file in fodler 'data'

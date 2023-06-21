@@ -12,67 +12,7 @@ library(here)
 options(dplyr.summarise.inform = FALSE)
 
 source(here::here("R/functions.R"))
+load(here("data/mmash.rda"))
 ```
-
-```{r}
-user_info_df <- import_multiple_files(
-  "user_info.csv",
-  import_user_info
-)
-user_info_df
-
-saliva_df <- import_multiple_files(
-  "saliva.csv",
-  import_saliva
-)
-saliva_df
-rr_df <- import_multiple_files(
-  "RR.csv",
-  import_rr
-)
-rr_df
-actigraph_df <- import_multiple_files(
-  "Actigraph.csv",
-  import_actigraph
-)
-actigraph_df
-
-summarised_rr_df <- rr_df %>%
-  group_by(user_id, day) %>%
-  summarise(across(ibi_s, list(
-    mean = ~ mean(.x, na.rm = TRUE),
-    sd = ~ sd(.x, na.rm = TRUE)
-  ))) %>%
-  ungroup()
-
-summarised_actigraph_df <- actigraph_df %>%
-  group_by(user_id, day) %>%
-  # These statistics will probably be different for you
-  summarise(across(c(hr, steps), list(
-    mean = ~ mean(.x, na.rm = TRUE),
-    sd = ~ sd(.x, na.rm = TRUE)
-  ))) %>%
-  ungroup()
-```
-
-
-```{r}
-saliva_with_day_df <- saliva_df %>% 
-    mutate(day = case_when(
-        samples == "before sleep" ~ 1,
-        samples == "wake up" ~ 2,
-    ))
-list(
-    user_info_df,
-    saliva_with_day_df,
-    summarised_rr_df,
-    summarised_actigraph_df
-) %>%
-      reduce(full_join)
-
-
-
-```
-
 
 
