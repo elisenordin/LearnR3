@@ -15,19 +15,42 @@ source(here::here("R/functions.R"))
 ```
 
 ```{r}
+user_info_df <- import_multiple_files(
+  "user_info.csv",
+  import_user_info
+)
+user_info_df
 
-extract_user_id <- function(imported_data) {
-  extracted_id <- imported_data %>%
-    dplyr::mutate(
-      user_id = str_extract(
-        file_path_id,
-        "user_[1-9][0-9]?"
-      ),
-      .before = everything()
-    ) %>%
-    select(-file_path_id)
-  return(extracted_id)
-}
+saliva_df <- import_multiple_files(
+  "saliva.csv",
+  import_saliva
+)
+saliva_df
+rr_df <- import_multiple_files(
+  "RR.csv",
+  import_rr
+)
+rr_df
+actigraph_df <- import_multiple_files(
+  "Actigraph.csv",
+  import_actigraph
+)
+actigraph_df
 
-extract_user_id(user_info_df)
+summarised_rr_df <- rr_df %>%
+  group_by(user_id, day) %>%
+  summarise(across(ibi_s, list(
+    mean = ~ mean(.x, na.rm = TRUE),
+    sd = ~ sd(.x, na.rm = TRUE)
+  ))) %>%
+  ungroup()
+
+summarised_actigraph_df <- actigraph_df %>%
+  group_by(user_id, day) %>%
+  # These statistics will probably be different for you
+  summarise(across(c(hr, steps), list(
+    mean = ~ mean(.x, na.rm = TRUE),
+    sd = ~ sd(.x, na.rm = TRUE)
+  ))) %>%
+  ungroup()
 ```

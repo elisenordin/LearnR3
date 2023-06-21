@@ -212,176 +212,110 @@ The following object is masked from 'package:tidyr':
     extract</code></pre>
 </div>
 </div>
-<section id="importing-all-user-info-data" class="level2">
-<h2 class="anchored" data-anchor-id="importing-all-user-info-data">Importing all user info data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>user_info_df <span class="ot">&lt;-</span> <span class="fu">import_multiple_files</span>(</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"user_info.csv"</span>,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  import_user_info</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"user_info.csv"</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    import_user_info</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="ot">&lt;-</span> <span class="fu">import_multiple_files</span>(</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"saliva.csv"</span>,</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  import_saliva</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>user_info_df <span class="sc">%&gt;%</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>user_info_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 22 × 1
-     age
-   &lt;dbl&gt;
- 1    29
- 2    27
- 3    27
- 4    27
- 5    25
- 6    27
- 7    24
- 8    27
- 9    24
-10     0
+<pre><code># A tibble: 22 × 5
+   user_id gender weight height   age
+   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1 user_1  M          65    169    29
+ 2 user_10 M          85    180    27
+ 3 user_11 M         115    186    27
+ 4 user_12 M          67    170    27
+ 5 user_13 M          74    180    25
+ 6 user_14 M          64    171    27
+ 7 user_15 M          80    180    24
+ 8 user_16 M          67    176    27
+ 9 user_17 M          60    175    24
+10 user_18 M          80    180     0
 # ℹ 12 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>user_info_df <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="ot">&lt;-</span>  <span class="fu">import_multiple_files</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"saliva.csv"</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    import_saliva</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>saliva_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 22 × 3
-   weight height   age
-    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
- 1     65    169    29
- 2     85    180    27
- 3    115    186    27
- 4     67    170    27
- 5     74    180    25
- 6     64    171    27
- 7     80    180    24
- 8     67    176    27
- 9     60    175    24
-10     80    180     0
-# ℹ 12 more rows</code></pre>
+<pre><code># A tibble: 42 × 4
+   user_id samples      cortisol_norm melatonin_norm
+   &lt;chr&gt;   &lt;chr&gt;                &lt;dbl&gt;          &lt;dbl&gt;
+ 1 user_1  before sleep        0.0341  0.0000000174 
+ 2 user_1  wake up             0.0779  0.00000000675
+ 3 user_10 before sleep        0.0370  0.00000000867
+ 4 user_10 wake up             0.0197  0.00000000257
+ 5 user_11 before sleep        0.0406  0.00000000204
+ 6 user_11 wake up             0.0156  0.00000000965
+ 7 user_12 before sleep        0.156   0.00000000354
+ 8 user_12 wake up             0.145   0.00000000864
+ 9 user_13 before sleep        0.0123  0.00000000190
+10 user_13 wake up             0.0342  0.00000000230
+# ℹ 32 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>user_info_df <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.character))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 22 × 2
-   file_path_id                                                           gender
-   &lt;chr&gt;                                                                  &lt;chr&gt; 
- 1 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
- 2 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
- 3 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
- 4 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
- 5 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
- 6 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
- 7 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
- 8 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
- 9 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
-10 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/LearnR/LearnR3/… M     
-# ℹ 12 more rows</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cortisol_mean =</span> <span class="fu">mean</span>(cortisol_norm),</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">melatonin_mean =</span> <span class="fu">mean</span>(melatonin_norm)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  cortisol_mean melatonin_mean
-          &lt;dbl&gt;          &lt;dbl&gt;
-1        0.0490  0.00000000765</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(cortisol_norm, melatonin_norm), mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  cortisol_norm melatonin_norm
-          &lt;dbl&gt;          &lt;dbl&gt;
-1        0.0490  0.00000000765</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(cortisol_norm, melatonin_norm), <span class="fu">list</span>(<span class="at">average =</span> mean, <span class="at">sd =</span> sd)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 4
-  cortisol_norm_average cortisol_norm_sd melatonin_norm_average
-                  &lt;dbl&gt;            &lt;dbl&gt;                  &lt;dbl&gt;
-1                0.0490           0.0478          0.00000000765
-# ℹ 1 more variable: melatonin_norm_sd &lt;dbl&gt;</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>saliva_df <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="fu">where</span>(is.numeric)), <span class="fu">list</span>(<span class="at">mean =</span> mean)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  cortisol_norm_mean melatonin_norm_mean
-               &lt;dbl&gt;               &lt;dbl&gt;
-1             0.0490       0.00000000765</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">list</span>(<span class="at">mean =</span> mean))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "mean"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># across(c(age, weight), ~ mean(.x, na.rm = TRUE))</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># across(c(age, weight), function(x) mean(x, na.rm = TRUE))</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># across(c(age, weight), \(x) mean(x, na.rm = TRUE))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="summarising-r" class="level2">
-<h2 class="anchored" data-anchor-id="summarising-r">Summarising R</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>rr_df <span class="ot">&lt;-</span> <span class="fu">import_multiple_files</span>(<span class="st">"RR.csv"</span>, import_rr)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>rr_df <span class="sc">%&gt;%</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(file_path_id, day) <span class="sc">%&gt;%</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(ibi_s), <span class="fu">list</span>(<span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in
-dplyr 1.1.0.
-ℹ Please use `reframe()` instead.
-ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()`
-  always returns an ungrouped data frame and adjust accordingly.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>rr_df <span class="ot">&lt;-</span>  <span class="fu">import_multiple_files</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RR.csv"</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    import_rr</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>rr_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,749,295 × 4
-# Groups:   file_path_id, day [44]
-   file_path_id                                 day ibi_s list(mean = ~mean(.x…¹
-   &lt;chr&gt;                                      &lt;dbl&gt; &lt;dbl&gt; &lt;named list&gt;          
- 1 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.258 &lt;formula&gt;             
- 2 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.319 &lt;formula&gt;             
- 3 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.266 &lt;formula&gt;             
- 4 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.401 &lt;formula&gt;             
- 5 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 1.09  &lt;formula&gt;             
- 6 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.752 &lt;formula&gt;             
- 7 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.337 &lt;formula&gt;             
- 8 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.933 &lt;formula&gt;             
- 9 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.731 &lt;formula&gt;             
-10 C:/Users/elisen/OneDrive - Chalmers/Docum…     1 0.454 &lt;formula&gt;             
-# ℹ 1,749,285 more rows
-# ℹ abbreviated name: ¹​`list(mean = ~mean(.x, na.rm = TRUE))`</code></pre>
+   user_id ibi_s   day time    
+   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;time&gt;  
+ 1 user_1  0.258     1 10:10:17
+ 2 user_1  0.319     1 10:10:18
+ 3 user_1  0.266     1 10:10:18
+ 4 user_1  0.401     1 10:10:18
+ 5 user_1  1.09      1 10:10:19
+ 6 user_1  0.752     1 10:10:20
+ 7 user_1  0.337     1 10:10:20
+ 8 user_1  0.933     1 10:10:21
+ 9 user_1  0.731     1 10:10:22
+10 user_1  0.454     1 10:10:23
+# ℹ 1,749,285 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rr_df <span class="ot">&lt;-</span> <span class="fu">import_multiple_files</span>(<span class="st">"RR.csv"</span>, import_rr)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>rr_df <span class="sc">%&gt;%</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(file_path_id, day) <span class="sc">%&gt;%</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(ibi_s, <span class="fu">list</span>(<span class="at">mean =</span> mean)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>actigraph_df <span class="ot">&lt;-</span>  <span class="fu">import_multiple_files</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Actigraph.csv"</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    import_actigraph</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>actigraph_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 44 × 3
-# Groups:   file_path_id [22]
-   file_path_id                                                   day ibi_s_mean
-   &lt;chr&gt;                                                        &lt;dbl&gt;      &lt;dbl&gt;
- 1 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.666
- 2 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.793
- 3 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.820
- 4 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.856
- 5 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.818
- 6 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.923
- 7 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.779
- 8 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.883
- 9 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     1      0.727
-10 C:/Users/elisen/OneDrive - Chalmers/Documents/Desktop/Learn…     2      0.953
-# ℹ 34 more rows</code></pre>
+<pre><code># A tibble: 1,462,678 × 13
+   user_id axis_1 axis_2 axis_3 steps    hr inclinometer_off
+   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;
+ 1 user_1       0      0      0     0    68                0
+ 2 user_1      11      4      7     1    68                0
+ 3 user_1       0     21     10     0    68                0
+ 4 user_1       0      1     24     0    68                0
+ 5 user_1      34     14     63     1   154                0
+ 6 user_1     101     10     90     0   161                0
+ 7 user_1      17     18     49     0   177                0
+ 8 user_1       0     34     23     0   177                0
+ 9 user_1      12     50     13     1   177                0
+10 user_1      32     38     36     0   177                0
+# ℹ 1,462,668 more rows
+# ℹ 6 more variables: inclinometer_standing &lt;dbl&gt;, inclinometer_sitting &lt;dbl&gt;,
+#   inclinometer_lying &lt;dbl&gt;, vector_magnitude &lt;dbl&gt;, day &lt;dbl&gt;, time &lt;time&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>summarised_rr_df <span class="ot">&lt;-</span> rr_df <span class="sc">%&gt;%</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(file_path_id, day) <span class="sc">%&gt;%</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(ibi_s, <span class="fu">list</span>(</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="sc">~</span> <span class="fu">sd</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  ))) <span class="sc">%&gt;%</span></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>summarised_rr_df <span class="ot">&lt;-</span> rr_df <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(user_id, day) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(ibi_s, <span class="fu">list</span>(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd =</span> <span class="sc">~</span> <span class="fu">sd</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    ))) <span class="sc">%&gt;%</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>summarised_actigraph_df <span class="ot">&lt;-</span> actigraph_df <span class="sc">%&gt;%</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(user_id, day) <span class="sc">%&gt;%</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># These statistics will probably be different for you</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(hr,steps), <span class="fu">list</span>(</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">mean =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd =</span> <span class="sc">~</span> <span class="fu">sd</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    ))) <span class="sc">%&gt;%</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
 
 </main>
 <!-- /main column -->
