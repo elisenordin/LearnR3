@@ -1,6 +1,7 @@
 Package: LearnR3
 Type: Project
 Version: 0.0.1
+Title: LearnR3
 Imports:
     dplyr,
     fs,
@@ -16,3 +17,5 @@ Depends:
     R (>= 2.10),
     tidyverse
 LazyData: true
+URL: https://github.com/elisenordin/LearnR3
+BugReports: https://github.com/elisenordin/LearnR3/issues
